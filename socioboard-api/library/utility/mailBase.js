@@ -101,6 +101,42 @@ class MailBase {
             }
         });
     }
+
+
+    /**
+     *  Send email via smtp services
+     *  @param {Object} data - To specify the neccessary details for sending emails
+     *  @param {string} data.toMail - To whom need to send the email
+     *  @param {string} data.subject - Subject of the mail
+     *  @param {string} data.htmlContent - Use any one of above templete
+     */
+    sendEmailBySMTP(data) {
+        return new Promise((resolve, reject) => {
+            if (!data) {
+                reject(new Error("Invalid data!"));
+            } else {
+
+                var client = nodemailer.createTransport({
+                    host: this.mailServiceConfig.smtp.host,
+                    port: this.mailServiceConfig.smtp.port,
+                    auth: {
+                        user: this.mailServiceConfig.smtp.user,
+                        pass: this.mailServiceConfig.smtp.pass,
+                    }
+                });
+                var email = {
+                    from: this.mailServiceConfig.smtp.email,
+                    to: data.toMail,
+                    subject: data.subject,
+                    html: data.htmlContent,
+                };
+                return client.sendMail(email)
+                    .then((info) => resolve(info))
+                    .catch((error) => reject(error));
+            }
+        });
+    }
+
 }
 
 

@@ -202,6 +202,14 @@ SendEmailServices.prototype.sendMails = function (defaultService, Details) {
                         resolve(info);
                 });
                 break;
+            case 'smtp':
+                mailServices.sendEmailBySMTP(Details, function (error, info) {
+                    if (error)
+                        reject(error);
+                    else
+                        resolve(info);
+                });
+                break;
             default:
                 break;
         }
